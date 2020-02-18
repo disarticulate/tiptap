@@ -1,8 +1,9 @@
-import Vue from 'vue'
+// import Vue from 'vue'
 
 export default class ComponentView {
 
   constructor(component, {
+    Vue,
     extension,
     parent,
     node,
@@ -11,6 +12,7 @@ export default class ComponentView {
     decorations,
     editable,
   }) {
+    this.Vue = Vue
     this.component = component
     this.extension = extension
     this.parent = parent
@@ -26,7 +28,7 @@ export default class ComponentView {
   }
 
   createDOM() {
-    const Component = Vue.extend(this.component)
+    const Component = this.Vue.extend(this.component)
     this.vm = new Component({
       parent: this.parent,
       propsData: {
@@ -68,15 +70,16 @@ export default class ComponentView {
     // Update props in component
     // TODO: Avoid mutating a prop directly.
     // Maybe there is a better way to do this?
-    const originalSilent = Vue.config.silent
-    Vue.config.silent = true
+    // const originalSilent = Vue.config.silent
+    // Vue.config.silent = true
 
     Object.entries(props).forEach(([key, value]) => {
-      this.vm._props[key] = value
+      // official way to set props
+      this.vm.$set(this.vm, key, value)
     })
     // this.vm._props.node = node
     // this.vm._props.decorations = decorations
-    Vue.config.silent = originalSilent
+    // Vue.config.silent = originalSilent
   }
 
   updateAttrs(attrs) {
