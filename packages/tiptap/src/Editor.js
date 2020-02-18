@@ -75,6 +75,8 @@ export default class Editor extends Emitter {
     this.commands = this.createCommands()
     this.setActiveNodesAndMarks()
 
+    this.Vue = this.options.Vue || require('vue')
+    
     if (this.options.autoFocus) {
       setTimeout(() => {
         this.focus()
@@ -285,6 +287,7 @@ export default class Editor extends Emitter {
           const component = extension.view
 
           return new ComponentView(component, {
+            Vue: this.Vue,
             extension,
             parent,
             node,
